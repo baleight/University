@@ -6,6 +6,7 @@
 .equ _SYS_WRITE, 64  # Syscall write
 
 # Inizio del programma
+#identificativo che del segmento global, dove elenchiamo tutti i simboli globali
 .global _start
 
 # Variabili statichie inizializzate a 0

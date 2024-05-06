@@ -18,7 +18,7 @@
     _start: 
         li  s0, 5       # Scrivi il numero 5
         li  s3, 3       # COSTANTE: 3
-        
+
     # Pushing phase
     pushing:
         sb s0, 0(sp)  # Metti nello stack s0

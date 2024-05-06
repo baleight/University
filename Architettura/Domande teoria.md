@@ -15,7 +15,7 @@ codice binario.
 
 #### Quali sono i passaggi di conversione?
 
-Il compilatore ha il ruolo di tradurre il lunguaggio ad alto livello in assembly, L'assembler prende in ingresso un programma scritto in assembly e lo traduce in binario
+Il compilatore ha il ruolo di tradurre il linguaggio ad alto livello in assembly, L'assembler prende in ingresso un programma scritto in assembly e lo traduce in binario
 
 Cose un ISA?
 
@@ -104,7 +104,7 @@ I registri di proprietà del chiamato possono essere sovrascritti quando viene c
 
 #### Instruction vs Cache data? Perche e' piu facile da progettare l'instruction cache
 
-Istruction cache ha miglior localita, sono tutti vicini al altra. 
+Instruction cache ha miglior localita, sono tutti vicini i registri 
 
 Istruzioni e dati, che proprieta devono avere? con la memoria istruzioni e; piu semplice perche devo solo leggere non scriverle come nella cache dati.
 
@@ -120,7 +120,7 @@ Progettare una cache istruzioni è generalmente considerato più semplice rispet
 
 - **Accessi sequenziali**: Le istruzioni vengono solitamente eseguite in sequenza durante l'esecuzione del programma, quindi è possibile sfruttare la località temporale e spaziale per migliorare l'efficienza della cache istruzioni. Questo comporta una gestione più semplice della sostituzione delle righe della cache e dell'organizzazione dei dati.
 
-- **Dimensioni più piccole**: La cache istruzioni tende ad essere più piccola rispetto alla cache dati, in quanto deve memorizzare solo le istruzioni del programma attualmente in esecuzione. Questo riduce la complessità del design e dei circuiti necessari per gestire la cache.
+- **Dimensioni più piccole**: La cache istruzioni tende ad essere più piccola rispetto alla cache dati, in quanto deve memorizzare solo le istruzioni del <mark>programma attualmente in esecuzione.</mark> Questo riduce la complessità del design e dei circuiti necessari per gestire la cache.
 
 Quanto alla necessità di avere una gerarchia di cache anche tra il PC e la cache istruzioni, ciò dipende dalle specifiche esigenze e architetture del processore. In alcuni casi, una singola cache istruzioni potrebbe essere sufficiente, mentre in altri casi una gerarchia di cache può migliorare ulteriormente le prestazioni del sistema riducendo i tempi di accesso alla memoria istruzioni. Questo dipende da fattori come la dimensione della cache, la frequenza con cui vengono eseguite nuove istruzioni e la complessità dell'architettura del processore. In generale, l'utilizzo di una gerarchia di cache consente di ridurre i tempi di accesso alla memoria istruzioni e migliorare le prestazioni complessive della CPU.
 
@@ -464,3 +464,70 @@ Ecco una spiegazione dettagliata del formato SB delle istruzioni di salto condiz
    - Ciò significa che il salto può essere effettuato solo a istruzioni allineate sul limite della mezza parola, che si trova ogni due istruzioni nel codice.
 
 In sintesi, il formato SB delle istruzioni di salto condizionale in RISC-V consente di specificare istruzioni di branch con indirizzamento relativo al PC e con un raggio d'azione limitato fino alla mezza parola. Ciò offre un'ampia flessibilità nella gestione dei salti nel codice, consentendo di creare strutture decisionali complesse all'interno dei programmi.
+
+### Memoria stack
+
+![](C:\Users\baleo\Pictures\GitUni\imagesMarkText\2024-05-02-22-21-50-image.png)
+
+In un programma assembly, la memoria può essere segmentata in diverse sezioni, a seconda delle necessità del programma e del sistema operativo su cui viene eseguito. Tuttavia, la segmentazione della memoria può essere generalmente suddivisa in diverse categorie:
+
+1. **Low Address Memory**: Questa è la parte inferiore della memoria e contiene solitamente il codice eseguibile del programma, i dati statici e altre informazioni cruciali per il programma. Qui sono inclusi il codice del programma (come le istruzioni assembly), le variabili globali e altre costanti.
+
+2. **Dynamic Memory**: Questa parte della memoria è usata per la gestione dinamica della memoria, come l'allocazione e la deallocazione di memoria durante l'esecuzione del programma. Tipicamente, questa area include l'heap, dove vengono allocati i blocchi di memoria a richiesta tramite funzioni come `malloc()` in C o `new` in C++. La dimensione di questa sezione può variare a seconda delle necessità del programma e del sistema operativo.
+
+3. **Initialized to Zero by Exec**: Questa parte della memoria è riservata per le variabili globali inizializzate a zero o a un valore predefinito direttamente dal file eseguibile durante la fase di caricamento. Questo può includere variabili globali inizializzate staticamente, come array e strutture.
+
+4. **Local Memory (Stack)**: Questa parte della memoria è utilizzata per la gestione delle variabili locali e dei record di attivazione delle funzioni. Viene spesso chiamata "stack" e cresce e si contrae durante l'esecuzione del programma. Ogni chiamata di funzione crea un nuovo frame nello stack, che contiene le variabili locali e altri dati relativi alla funzione chiamata.
+
+Pseudo-istruzioni che bisogna studiare solo quelli evidenziate:
+
+![](C:\Users\baleo\Pictures\GitUni\imagesMarkText\2024-05-02-22-41-25-image.png)
+
+### Il processo di esecuzione delle istruzioni in un processore
+
+può essere diviso in diverse fasi, o stadi, ciascuno dei quali svolge un compito specifico nell'elaborazione delle istruzioni. Qui di seguito, spiego ciascuno di questi stadi:
+
+1. **Fetch (Recupero)**:
+   
+   - Il Program Counter (PC) contiene l'indirizzo dell'istruzione da eseguire.
+   - L'istruzione viene letta dalla memoria usando l'indirizzo contenuto nel PC.
+   - L'istruzione recuperata viene immagazzinata nel registro di istruzione.
+
+2. **Decodifica**:
+   
+   - L'istruzione recuperata viene analizzata e decodificata per comprendere quale operazione deve essere eseguita e su quali dati.
+   - Durante questo processo, vengono identificati i registri coinvolti nell'istruzione e le modalità di accesso alla memoria, se necessario.
+
+3. **Esecuzione**:
+   
+   - In base al tipo di istruzione, l'unità di esecuzione decide come manipolare i dati.
+   - Per istruzioni aritmetiche, la ALU (Unità Logica e Aritmetica) esegue l'operazione specificata sui dati.
+   - Per le istruzioni di memoria, l'indirizzo di memoria è calcolato, e l'accesso alla memoria può avvenire per leggere o scrivere dati.
+   - Per le istruzioni di salto condizionale (branch), viene calcolato se il salto deve essere effettuato o meno.
+
+4. **Memoria**:
+   
+   - Se l'istruzione coinvolge l'accesso alla memoria, questo stadio comporta l'accesso effettivo alla memoria per leggere o scrivere dati.
+
+5. **Writeback (Scrittura nel Registro)**:
+   
+   - Se l'istruzione ha prodotto un risultato che deve essere scritto in un registro, questo stadio esegue la scrittura del risultato nel registro appropriato.
+   - Ad esempio, per le istruzioni aritmetiche, il risultato può essere scritto nel registro di destinazione specificato dall'istruzione.
+
+Il "datapath" rappresenta il percorso dei dati attraverso questi stadi, mentre la "logica di controllo" è responsabile per controllare quali segnali devono essere attivati in ciascuno stadio, incluso il controllo dei multiplexer per instradare i dati attraverso i percorsi appropriati.
+
+In breve, ogni istruzione attraversa questi stadi in sequenza, subendo le operazioni necessarie per completare la sua esecuzione. La logica di controllo gestisce il flusso di dati e il controllo tra i diversi stadi per garantire che l'istruzione venga eseguita correttamente.
+
+### Differenza tra varie istruzioni:
+
+Sì, ci sono differenze significative tra queste istruzioni nel contesto dell'assembly MIPS:
+
+1. `li a0, t0`: Questa istruzione carica un valore immediato nel registro `$a0`. Il valore da caricare è quello contenuto nel registro `$t0`. Tuttavia, in MIPS non esiste un'istruzione `li` che carichi direttamente un valore da un registro, quindi `li` carica un valore immediato nel registro specificato.
+
+2. `add a0, zero, t0`: Questa istruzione esegue un'addizione tra il contenuto del registro `$zero` (che ha sempre il valore 0 in MIPS) e il contenuto del registro `$t0`, quindi il risultato viene memorizzato nel registro `$a0`. Questo è un modo per copiare il contenuto di `$t0` in `$a0`.
+
+3. `mv a0, t0`: Questa istruzione copia semplicemente il contenuto del registro `$t0` nel registro `$a0`. È un'abbreviazione comune per l'operazione di movimento (move) in MIPS assembly, comunemente utilizzata per copiare il contenuto di un registro in un altro.
+
+4. `la a0, t0`: Questa istruzione carica l'indirizzo di memoria contenuto nel registro `$t0` nel registro `$a0`. Tuttavia, `la` è usato comunemente per caricare l'indirizzo di una label (etichetta) e non per l'indirizzo di un registro. Quindi, se `t0` contiene un indirizzo valido in memoria, questa istruzione non otterrà l'indirizzo contenuto in `t0`, ma caricherà l'indirizzo della label `t0` (che presumibilmente non è definita nel codice).
+
+In breve, le prime tre istruzioni sono comuni e corrette in MIPS assembly, mentre l'ultima (`la a0, t0`) ha un utilizzo errato e non produce l'effetto desiderato, a meno che non si abbia una label `t0` definita nel codice, il che è improbabile.

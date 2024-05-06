@@ -1,5 +1,7 @@
 # Primo programma in RISC-V
 
+![](C:\Users\baleo\Pictures\GitUni\imagesMarkText\2024-05-05-11-04-26-image.png)
+
 ```riscv
 # Che bello! Adoro l'assembly!
 # Questo programma funziona, è verificato!
