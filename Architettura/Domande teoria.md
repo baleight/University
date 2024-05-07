@@ -13,6 +13,8 @@
 livello più basso di linguaggio che un umano può gestire; sotto troviamo direttamente il
 codice binario.
 
+![](C:\Users\baleo\Pictures\GitUni\imagesMarkText\2024-05-06-21-48-21-image.png)
+
 #### Quali sono i passaggi di conversione?
 
 Il compilatore ha il ruolo di tradurre il linguaggio ad alto livello in assembly, L'assembler prende in ingresso un programma scritto in assembly e lo traduce in binario
@@ -531,3 +533,154 @@ Sì, ci sono differenze significative tra queste istruzioni nel contesto dell'as
 4. `la a0, t0`: Questa istruzione carica l'indirizzo di memoria contenuto nel registro `$t0` nel registro `$a0`. Tuttavia, `la` è usato comunemente per caricare l'indirizzo di una label (etichetta) e non per l'indirizzo di un registro. Quindi, se `t0` contiene un indirizzo valido in memoria, questa istruzione non otterrà l'indirizzo contenuto in `t0`, ma caricherà l'indirizzo della label `t0` (che presumibilmente non è definita nel codice).
 
 In breve, le prime tre istruzioni sono comuni e corrette in MIPS assembly, mentre l'ultima (`la a0, t0`) ha un utilizzo errato e non produce l'effetto desiderato, a meno che non si abbia una label `t0` definita nel codice, il che è improbabile.
+
+## Come funziona un salto?
+
+![](C:\Users\baleo\Pictures\GitUni\imagesMarkText\2024-05-06-21-35-22-image.png)
+
+4 byte per ogni istruzione 
+
+Come e' formato il file oggetto ELF(executable and linkable)
+
+## Formato di file ELF (Executable and Linkable Format)
+
+Il formato ELF (Executable and Linkable Format) è un formato di file standard utilizzato per eseguibili, librerie condivise e file oggetto su sistemi operativi UNIX-like. Questo formato è stato progettato per essere flessibile e adatto a una vasta gamma di architetture e sistemi operativi.
+
+Ecco una breve panoramica di come è strutturato un file ELF:
+
+1. **Header**: Il file ELF inizia con un header che fornisce informazioni generali sul contenuto del file. Questo header include dettagli come il tipo di file (eseguibile, condiviso, oggetto), l'architettura di destinazione, la versione del formato ELF, l'offset dei diversi segmenti nel file e altro ancora.
+
+2. **Segmenti**: Il file ELF è diviso in segmenti, ognuno dei quali contiene una parte specifica del programma. I segmenti principali sono:
+   
+   - Segmento di testo (o codice): Contiene le istruzioni eseguibili del programma.
+   - Segmento dati statici: Contiene dati statici allocati per l'intera durata del programma, come variabili globali e costanti.
+     un pezzo di memoria all interno nella quale avro le informazione relative alle variabile globali o statiche(visibil in tutto il progetto)
+   - Segmenti aggiuntivi: Possono essere presenti segmenti aggiuntivi per altri tipi di dati, come segmenti per dati inizializzati e non inizializzati.
+
+3. **Informazioni di rilocazione**: Questa sezione contiene informazioni sulla rilocazione, che sono necessarie quando il programma viene caricato in memoria. Le informazioni di rilocazione indicano come aggiustare gli indirizzi delle variabili e delle istruzioni del programma in base alla posizione effettiva di caricamento.
+
+4. **Tabella dei simboli**: Contiene una tabella dei simboli che associa nomi di variabili, funzioni e altri simboli utilizzati nel programma con i relativi indirizzi. Questa tabella è utile per la fase di collegamento (linking) quando il programma deve risolvere i riferimenti a simboli esterni.
+   ESEMPIO QUANDO COMPILO UN FILE CON PIU LIBRERIE, ho una tabella con i nomi esempio Funzione Sqrt() e nella tabella mettero il simbolo sqrt e la distanza relativa del simbolo in questo file oggetto. Servira poi dentro il linker quando dovra collegare ogni file.
+
+5. **Informazioni di debug**: Facoltativamente, un file ELF può contenere informazioni di debug che consentono di associare istruzioni di programma e variabili a linee di codice sorgente. Queste informazioni possono essere utilizzate da debugger e altri strumenti di analisi.
+
+![](C:\Users\baleo\Pictures\GitUni\imagesMarkText\2024-05-06-22-19-12-image.png)
+
+## Fase di linking
+
+La fase di linking è una parte fondamentale della compilazione di programmi che coinvolgono più file sorgente o oggetto. Il linking combina i moduli oggetto separati in un'unica immagine eseguibile o libreria condivisa. Ecco una spiegazione più dettagliata dei passaggi chiave della fase di linking:
+
+1. **Fusione dei segmenti**: Durante la fase di linking, i segmenti dei diversi moduli oggetto vengono fusi insieme per formare una singola immagine eseguibile o libreria condivisa. Questo può includere la combinazione di segmenti di testo (codice eseguibile), segmenti di dati statici, tabelle dei simboli e altre sezioni pertinenti.
+
+2. **Risoluzione delle etichette**: Durante la compilazione, le etichette nei vari moduli oggetto sono state definite con indirizzi relativi. Durante il linking, queste etichette vengono risolte in indirizzi assoluti o relativi alla posizione di caricamento dell'eseguibile finale. Questo processo determina effettivamente gli indirizzi di memoria per le variabili e le funzioni all'interno del programma.
+
+3. **Risoluzione dei riferimenti esterni**: Se il programma fa riferimento a funzioni o variabili definite in altri moduli oggetto, la fase di linking risolve questi riferimenti esterni. Ciò significa che i riferimenti vengono collegati agli indirizzi delle rispettive definizioni in altri moduli oggetto o librerie condivise.
+
+4. **Patch degli indirizzi dipendenti dalla posizione**: Alcuni programmi possono fare riferimento a dati o codice in posizioni specifiche, ad esempio utilizzando indirizzi assoluti anziché relativi. Durante la fase di linking, questi riferimenti vengono "patchati" o aggiornati in base alla posizione di caricamento effettiva dell'eseguibile finale.
+
+5. **Risoluzione delle dipendenze di posizione**: In alcuni casi, le dipendenze dalla posizione potrebbero essere lasciate per essere risolte successivamente da un loader di rilocazione durante il caricamento dell'eseguibile in memoria. Tuttavia, con l'uso della memoria virtuale, queste dipendenze non sono più un problema critico poiché i programmi possono essere caricati in posizioni assolute nello spazio di memoria virtuale.
+
+In definitiva, la fase di linking è cruciale per produrre un eseguibile o una libreria condivisa completamente funzionale. Attraverso la risoluzione delle etichette, la gestione dei riferimenti esterni e la patch degli indirizzi dipendenti dalla posizione, il linker crea un'immagine eseguibile che può essere caricata e eseguita correttamente dal sistema operativo.
+
+## Fase di loading
+
+La fase di loading è il processo attraverso il quale un programma viene caricato dalla sua immagine sul disco in memoria, in preparazione per l'esecuzione. Ecco una spiegazione dettagliata dei passaggi chiave della fase di loading:
+
+1. **Lettura dell'header**: Il loader legge l'header dell'immagine eseguibile dal file sul disco per determinare le dimensioni dei segmenti del programma e altre informazioni rilevanti.
+
+2. **Creazione dello spazio degli indirizzi virtuali**: Il loader crea lo spazio degli indirizzi virtuali all'interno della memoria del sistema operativo. Questo spazio degli indirizzi sarà utilizzato per caricare il programma e allocare le sue varie sezioni.
+
+3. **Copia del testo e dei dati inizializzati in memoria**: Il loader copia il segmento di testo (il codice eseguibile) e il segmento dei dati inizializzati dalla loro posizione nell'immagine del file in memoria. Questo può essere fatto direttamente o impostando le voci della tabella delle pagine in modo che possano essere generate in modo differito (paginated) quando vengono richieste.
+
+4. **Impostazione degli argomenti nello stack**: Il loader prepara lo stack con eventuali argomenti passati al programma durante la sua esecuzione. Questi argomenti possono includere informazioni come il nome del programma, gli argomenti della riga di comando, variabili d'ambiente e altro ancora.
+
+5. **Inizializzazione dei registri**: Il loader inizializza i registri della CPU, inclusi il program counter (PC), lo stack pointer (SP), e eventualmente altri registri necessari per l'esecuzione del programma.
+
+6. **Salto alla routine di avvio**: Dopo aver preparato l'ambiente di esecuzione, il loader salta alla routine di avvio del programma. Questa routine inizializza ulteriori risorse, come variabili globali e dati di sistema, e infine chiama la funzione principale `main` del programma.
+
+7. **Esecuzione del programma principale**: Una volta che il loader ha preparato adeguatamente l'ambiente di esecuzione e ha chiamato la funzione `main`, il controllo viene trasferito al programma principale. Il programma inizia ad eseguire le sue istruzioni a partire dalla funzione `main`.
+
+8. **Chiamata di syscall exit**: Quando la funzione `main` termina o restituisce il controllo al loader, quest'ultimo esegue una chiamata di sistema `exit` per terminare il programma e restituire il controllo al sistema operativo.
+
+In breve, la fase di loading è responsabile di preparare il terreno per l'esecuzione del programma, allocando memoria, inizializzando registri e risorse di sistema, e infine avviando l'esecuzione del programma stesso.
+
+Come si fa una chiamata a funzione:
+Procedure calling
+
+- popolare i registri x10 - x17 con i parametri
+- allocare memoria per la procedure
+  → in realtà è più un gioco di simmetria dei puntatori
+  per gestire in maniera trasparente le stack, più che
+  vera e propria allocazione
+  come si effettuano queste cose?
+
+La fase di loading è il processo attraverso il quale un programma viene caricato dalla sua immagine sul disco in memoria, in preparazione per l'esecuzione. Ecco una spiegazione dettagliata dei passaggi chiave della fase di loading:
+
+1. **Lettura dell'header**: Il loader legge l'header dell'immagine eseguibile dal file sul disco per determinare le dimensioni dei segmenti del programma e altre informazioni rilevanti.
+
+2. **Creazione dello spazio degli indirizzi virtuali**: Il loader crea lo spazio degli indirizzi virtuali all'interno della memoria del sistema operativo. Questo spazio degli indirizzi sarà utilizzato per caricare il programma e allocare le sue varie sezioni.
+
+3. **Copia del testo e dei dati inizializzati in memoria**: Il loader copia il segmento di testo (il codice eseguibile) e il segmento dei dati inizializzati dalla loro posizione nell'immagine del file in memoria. Questo può essere fatto direttamente o impostando le voci della tabella delle pagine in modo che possano essere generate in modo differito (paginated) quando vengono richieste.
+
+4. **Impostazione degli argomenti nello stack**: Il loader prepara lo stack con eventuali argomenti passati al programma durante la sua esecuzione. Questi argomenti possono includere informazioni come il nome del programma, gli argomenti della riga di comando, variabili d'ambiente e altro ancora.
+
+5. **Inizializzazione dei registri**: Il loader inizializza i registri della CPU, inclusi il program counter (PC), lo stack pointer (SP), e eventualmente altri registri necessari per l'esecuzione del programma.
+
+6. **Salto alla routine di avvio**: Dopo aver preparato l'ambiente di esecuzione, il loader salta alla routine di avvio del programma. Questa routine inizializza ulteriori risorse, come variabili globali e dati di sistema, e infine chiama la funzione principale `main` del programma.
+
+7. **Esecuzione del programma principale**: Una volta che il loader ha preparato adeguatamente l'ambiente di esecuzione e ha chiamato la funzione `main`, il controllo viene trasferito al programma principale. Il programma inizia ad eseguire le sue istruzioni a partire dalla funzione `main`.
+
+8. **Chiamata di syscall exit**: Quando la funzione `main` termina o restituisce il controllo al loader, quest'ultimo esegue una chiamata di sistema `exit` per terminare il programma e restituire il controllo al sistema operativo.
+
+In breve, la fase di loading è responsabile di preparare il terreno per l'esecuzione del programma, allocando memoria, inizializzando registri e risorse di sistema, e infine avviando l'esecuzione del programma stesso.
+
+Lazy Linkage è una tecnica utilizzata nel contesto del linking dinamico per posticipare il caricamento delle routine di una libreria condivisa fino al momento in cui vengono effettivamente chiamate. Questo approccio viene adottato per ottimizzare l'utilizzo delle risorse di sistema, caricando solo le parti della libreria necessarie per l'esecuzione del programma.
+
+Ecco come funziona Lazy Linkage:
+
+1. **Indirection table**: Quando un programma utilizza una libreria condivisa, anziché collegarsi direttamente alla routine della libreria, viene utilizzata una tabella di indirizzamento. Questa tabella contiene puntatori alle routine della libreria, ma inizialmente questi puntatori puntano a "stub" anziché alla vera routine.
+
+2. **Stub**: Lo stub è una piccola porzione di codice che viene eseguita quando una routine della libreria è chiamata per la prima volta. Lo stub si occupa di caricare l'ID della routine desiderata e di saltare al linker/loader.
+
+3. **Linker/loader code**: Il linker/loader è responsabile del caricamento effettivo della routine richiesta dalla libreria condivisa. Quando lo stub viene eseguito per la prima volta, il linker/loader carica dinamicamente la routine dalla libreria condivisa e aggiorna il puntatore nella tabella di indirizzamento in modo che punti direttamente alla routine caricata.
+
+4. **Dynamically mapped code**: La routine della libreria condivisa viene quindi mappata dinamicamente nello spazio di indirizzamento del processo in esecuzione. Questo significa che la routine è ora disponibile per essere chiamata direttamente dal programma senza dover passare attraverso lo stub.
+
+In sostanza, Lazy Linkage consente di evitare il caricamento anticipato delle routine di una libreria condivisa, posticipandolo fino al momento in cui è effettivamente necessario. Ciò riduce il tempo di avvio del programma e consente di risparmiare risorse di sistema, in quanto solo le parti della libreria effettivamente utilizzate vengono caricate in memoria.
+
+## Procedura di chiamata delle funzioni (o procedure)
+
+segue un approccio specifico, che coinvolge diverse fasi. Ecco i passaggi richiesti per una chiamata di funzione:
+
+1. **Trasferire il controllo alla procedura**: Utilizzando l'istruzione `jal` (Jump and Link), il controllo viene trasferito alla procedura. L'indirizzo dell'istruzione successiva viene memorizzato nel registro x1, in modo che la procedura possa tornare a questo punto quando ha finito di eseguire.
+
+2. **Acquisire memoria per la procedura**: La procedura, una volta chiamata, può acquisire memoria per le sue operazioni, se necessario. Questo potrebbe includere l'allocazione di spazio sullo stack per le variabili locali o altri dati temporanei.
+
+3. **Eseguire le operazioni della procedura**: La procedura esegue le operazioni richieste utilizzando i parametri passati e le variabili locali, se presenti.
+
+4. **Posizionare il risultato nel registro per il chiamante**: Se la procedura restituisce un valore, questo viene solitamente posizionato in un registro specifico (ad esempio, x10) in modo che il chiamante possa accedervi dopo il ritorno dalla procedura.
+
+5. **Ritorno al punto di chiamata**: Utilizzando l'istruzione `jalr` (Jump and Link Register), il controllo viene restituito al punto di chiamata memorizzato in x1. Questo processo di ritorno restituisce il flusso di esecuzione al punto esatto del programma da cui è stata chiamata la funzione.
+
+Quindi, una chiamata di funzione è effettuata utilizzando l'istruzione `jal`, mentre il ritorno dalla funzione è gestito tramite l'istruzione `jalr`. Entrambe queste istruzioni permettono di gestire la sequenza di esecuzione del programma in modo efficace e efficiente.
+<mark>Jal si usa per chiamare una funzione ; jalr si usa per tornare al punto chiamante</mark>
+
+Jump(salta alternando il control flow lineare in un indirizzo arbitrario) and link(metto dentro al registro passato come primo parametro l'indirzzo del pc+4)
+
+Perche si fa? Quando faccio jump perdo l'informazione 
+
+## Leaf Procedure Example
+
+La procedura Leaf Example è un esempio di una procedura che non chiama altre funzioni e che quindi non ha bisogno di salvare il registro di collegamento (ra) sullo stack. Di seguito, spiego il codice assembly e il motivo per cui alcuni registri vengono salvati sullo stack:
+
+1. **Inizializzazione dello stack**: Iniziamo aggiustando lo stack per fare spazio per i registri che vogliamo salvare. In questo caso, aggiungiamo 24 byte allo stack.
+
+2. **Salvataggio dei registri temporanei**: I registri temporanei x5 e x6 vengono salvati sullo stack con un offset di 16 e 8 byte rispettivamente. Questo viene fatto perché non possiamo sapere se i registri x5 e x6 contengono dati importanti che non vogliamo perdere. Salvando questi registri sullo stack, ci assicuriamo di preservare i valori originali.
+
+3. **Salvataggio del risultato e ripristino del registro x20**: Il registro x20 viene utilizzato per memorizzare il risultato della procedura. Dopo aver calcolato il risultato, lo salviamo sullo stack con un offset di 0 byte. Successivamente, il registro x20 viene ripristinato da stack.
+
+4. **Ripristino dello stack**: Dopo aver completato le operazioni all'interno della procedura, ripristiniamo lo stack per liberare lo spazio che avevamo riservato in precedenza. Questo viene fatto aggiungendo 24 byte allo stack pointer.
+
+5. **Ritorno dalla procedura**: Infine, usiamo l'istruzione `jalr` per tornare all'indirizzo contenuto in x1, che è il registro di collegamento salvato al momento della chiamata alla procedura.
+
+In sostanza, il motivo per cui salviamo alcuni registri sullo stack è garantire che i valori originali non vengano persi durante l'esecuzione della procedura. Questo è particolarmente importante quando la procedura è chiamata da una parte esterna e non sappiamo quali dati possono essere stati memorizzati in determinati registri.
