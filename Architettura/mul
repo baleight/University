@@ -1,0 +1,42 @@
+#if(b<=0)
+#	return a0;
+#else
+#	return mul(a0,b-1)*2
+
+
+.globl main
+.data
+num: .float 2
+pi: .float 3.14
+
+.text
+main:
+li t3, 0
+flw fa0,num,t3
+flw fa1,pi, x0
+li t0,2
+j mul
+
+mul:
+ble t0,zero,exit 
+
+#prerparo fib(n-1)
+#salvo
+addi sp,sp, -8
+sw ra, 0(sp)
+fsw fa0,4(sp) #attento che per caricare float fsw
+#qui
+
+addi t0,t0,-1 #t0--;
+j mul #ritorno a0
+fmul.s fa0,fa0,fa1 #
+
+#ripristino
+lw ra, 0(sp)
+flw fa0, 4(sp)
+addi sp,sp, 8
+
+exit:
+addi a0,a0,0
+jal ra,mul
+

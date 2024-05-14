@@ -520,19 +520,7 @@ Il "datapath" rappresenta il percorso dei dati attraverso questi stadi, mentre l
 
 In breve, ogni istruzione attraversa questi stadi in sequenza, subendo le operazioni necessarie per completare la sua esecuzione. La logica di controllo gestisce il flusso di dati e il controllo tra i diversi stadi per garantire che l'istruzione venga eseguita correttamente.
 
-### Differenza tra varie istruzioni:
 
-Sì, ci sono differenze significative tra queste istruzioni nel contesto dell'assembly MIPS:
-
-1. `li a0, t0`: Questa istruzione carica un valore immediato nel registro `$a0`. Il valore da caricare è quello contenuto nel registro `$t0`. Tuttavia, in MIPS non esiste un'istruzione `li` che carichi direttamente un valore da un registro, quindi `li` carica un valore immediato nel registro specificato.
-
-2. `add a0, zero, t0`: Questa istruzione esegue un'addizione tra il contenuto del registro `$zero` (che ha sempre il valore 0 in MIPS) e il contenuto del registro `$t0`, quindi il risultato viene memorizzato nel registro `$a0`. Questo è un modo per copiare il contenuto di `$t0` in `$a0`.
-
-3. `mv a0, t0`: Questa istruzione copia semplicemente il contenuto del registro `$t0` nel registro `$a0`. È un'abbreviazione comune per l'operazione di movimento (move) in MIPS assembly, comunemente utilizzata per copiare il contenuto di un registro in un altro.
-
-4. `la a0, t0`: Questa istruzione carica l'indirizzo di memoria contenuto nel registro `$t0` nel registro `$a0`. Tuttavia, `la` è usato comunemente per caricare l'indirizzo di una label (etichetta) e non per l'indirizzo di un registro. Quindi, se `t0` contiene un indirizzo valido in memoria, questa istruzione non otterrà l'indirizzo contenuto in `t0`, ma caricherà l'indirizzo della label `t0` (che presumibilmente non è definita nel codice).
-
-In breve, le prime tre istruzioni sono comuni e corrette in MIPS assembly, mentre l'ultima (`la a0, t0`) ha un utilizzo errato e non produce l'effetto desiderato, a meno che non si abbia una label `t0` definita nel codice, il che è improbabile.
 
 ## Come funziona un salto?
 
@@ -604,37 +592,9 @@ La fase di loading è il processo attraverso il quale un programma viene caricat
 
 In breve, la fase di loading è responsabile di preparare il terreno per l'esecuzione del programma, allocando memoria, inizializzando registri e risorse di sistema, e infine avviando l'esecuzione del programma stesso.
 
-Come si fa una chiamata a funzione:
-Procedure calling
+### Lazy Linkage
 
-- popolare i registri x10 - x17 con i parametri
-- allocare memoria per la procedure
-  → in realtà è più un gioco di simmetria dei puntatori
-  per gestire in maniera trasparente le stack, più che
-  vera e propria allocazione
-  come si effettuano queste cose?
-
-La fase di loading è il processo attraverso il quale un programma viene caricato dalla sua immagine sul disco in memoria, in preparazione per l'esecuzione. Ecco una spiegazione dettagliata dei passaggi chiave della fase di loading:
-
-1. **Lettura dell'header**: Il loader legge l'header dell'immagine eseguibile dal file sul disco per determinare le dimensioni dei segmenti del programma e altre informazioni rilevanti.
-
-2. **Creazione dello spazio degli indirizzi virtuali**: Il loader crea lo spazio degli indirizzi virtuali all'interno della memoria del sistema operativo. Questo spazio degli indirizzi sarà utilizzato per caricare il programma e allocare le sue varie sezioni.
-
-3. **Copia del testo e dei dati inizializzati in memoria**: Il loader copia il segmento di testo (il codice eseguibile) e il segmento dei dati inizializzati dalla loro posizione nell'immagine del file in memoria. Questo può essere fatto direttamente o impostando le voci della tabella delle pagine in modo che possano essere generate in modo differito (paginated) quando vengono richieste.
-
-4. **Impostazione degli argomenti nello stack**: Il loader prepara lo stack con eventuali argomenti passati al programma durante la sua esecuzione. Questi argomenti possono includere informazioni come il nome del programma, gli argomenti della riga di comando, variabili d'ambiente e altro ancora.
-
-5. **Inizializzazione dei registri**: Il loader inizializza i registri della CPU, inclusi il program counter (PC), lo stack pointer (SP), e eventualmente altri registri necessari per l'esecuzione del programma.
-
-6. **Salto alla routine di avvio**: Dopo aver preparato l'ambiente di esecuzione, il loader salta alla routine di avvio del programma. Questa routine inizializza ulteriori risorse, come variabili globali e dati di sistema, e infine chiama la funzione principale `main` del programma.
-
-7. **Esecuzione del programma principale**: Una volta che il loader ha preparato adeguatamente l'ambiente di esecuzione e ha chiamato la funzione `main`, il controllo viene trasferito al programma principale. Il programma inizia ad eseguire le sue istruzioni a partire dalla funzione `main`.
-
-8. **Chiamata di syscall exit**: Quando la funzione `main` termina o restituisce il controllo al loader, quest'ultimo esegue una chiamata di sistema `exit` per terminare il programma e restituire il controllo al sistema operativo.
-
-In breve, la fase di loading è responsabile di preparare il terreno per l'esecuzione del programma, allocando memoria, inizializzando registri e risorse di sistema, e infine avviando l'esecuzione del programma stesso.
-
-Lazy Linkage è una tecnica utilizzata nel contesto del linking dinamico per posticipare il caricamento delle routine di una libreria condivisa fino al momento in cui vengono effettivamente chiamate. Questo approccio viene adottato per ottimizzare l'utilizzo delle risorse di sistema, caricando solo le parti della libreria necessarie per l'esecuzione del programma.
+è una tecnica utilizzata nel contesto del linking dinamico per posticipare il caricamento delle routine di una libreria condivisa fino al momento in cui vengono effettivamente chiamate. Questo approccio viene adottato per ottimizzare l'utilizzo delle risorse di sistema, caricando solo le parti della libreria necessarie per l'esecuzione del programma.
 
 Ecco come funziona Lazy Linkage:
 
@@ -684,3 +644,77 @@ La procedura Leaf Example è un esempio di una procedura che non chiama altre fu
 5. **Ritorno dalla procedura**: Infine, usiamo l'istruzione `jalr` per tornare all'indirizzo contenuto in x1, che è il registro di collegamento salvato al momento della chiamata alla procedura.
 
 In sostanza, il motivo per cui salviamo alcuni registri sullo stack è garantire che i valori originali non vengano persi durante l'esecuzione della procedura. Questo è particolarmente importante quando la procedura è chiamata da una parte esterna e non sappiamo quali dati possono essere stati memorizzati in determinati registri.
+
+## Set di istruzioni
+
+rappresentano le diverse estensioni disponibili per l'architettura RISC-V, ciascuna delle quali aggiunge funzionalità specifiche al set di istruzioni base. Nel contesto di un calcolatore, ciascuna estensione può essere utilizzata per fornire capacità aggiuntive o ottimizzazioni specifiche per determinati tipi di operazioni. Ecco una spiegazione di ciascuna estensione:
+
+1. **M (integer multiply, divide, remainder):** Questa estensione aggiunge istruzioni per operazioni di moltiplicazione, divisione e resto intero. È utile per calcoli numerici complessi che coinvolgono operazioni aritmetiche avanzate.
+
+2. **A (atomic memory operations):** Questa estensione fornisce istruzioni per operazioni di memoria atomiche, che sono essenziali per garantire l'integrità dei dati in ambienti multi-threaded o multi-processo. Le operazioni atomiche consentono di eseguire in modo affidabile operazioni di lettura-modifica-scrittura su dati condivisi senza incorrere in problemi di concorrenza.
+
+3. **F (single-precision floating point):** Questa estensione aggiunge istruzioni per operazioni di punto mobile in precisione singola. È utile per applicazioni che richiedono calcoli numerici con numeri reali in virgola mobile, come grafica 3D, simulazioni scientifiche e applicazioni finanziarie.
+
+4. **D (double-precision floating point):** Questa estensione estende ulteriormente l'estensione F per supportare operazioni in doppia precisione. È particolarmente utile per applicazioni che richiedono una maggiore precisione nei calcoli numerici.
+
+5. **C (compressed instructions):** Questa estensione introduce un set di istruzioni compresso, che riduce la dimensione del codice eseguibile. È utile per ridurre le dimensioni del codice in applicazioni embedded o in situazioni in cui lo spazio di memoria è limitato.
+
+6. **16-bit encoding for frequently used instructions:** Questa estensione consente l'utilizzo di un'encoding a 16 bit per alcune istruzioni frequentemente utilizzate, riducendo ulteriormente le dimensioni del codice eseguibile. È particolarmente utile in applicazioni embedded con risorse di memoria limitate.
+
+Nel complesso, queste estensioni consentono di adattare l'architettura RISC-V alle esigenze specifiche dell'applicazione, fornendo un'ampia gamma di funzionalità per soddisfare requisiti diversi, dall'aritmetica numerica alla gestione della memoria e all'ottimizzazione del codice.
+
+
+
+## Pipeline
+
+Un datapath pipelined è una progettazione hardware in cui il flusso di esecuzione delle istruzioni di un processore viene diviso in diverse fasi sequenziali, o "pipeline stages". Ogni istruzione attraversa queste fasi in successione, permettendo così al processore di eseguire più istruzioni contemporaneamente, aumentando l'efficienza e la velocità complessiva del processore.
+
+Il concetto di pipeline deriva dal concetto di catena di montaggio in ambito manifatturiero, dove ciascuna fase del processo di produzione è eseguita in modo sequenziale da diverse stazioni di lavoro. In un datapath pipelined, ogni fase del processo di esecuzione di un'istruzione è eseguita da una diversa "unità funzionale" del processore.
+
+Le fasi principali di un datapath pipelined tipico includono:
+
+1. **Fetch (Prelevamento):** Durante questa fase, l'istruzione viene prelevata dalla memoria di programma e caricata nel processore.
+
+2. **Decode (Decodifica):** Durante questa fase, l'istruzione viene decodificata per determinare quali operazioni devono essere eseguite e quali operandi devono essere utilizzati.
+
+3. **Execute (Esecuzione):** Durante questa fase, le operazioni specificate dall'istruzione vengono eseguite. Ad esempio, possono essere eseguite operazioni aritmetiche, logiche o di trasferimento di dati.
+
+4. **Memory Access (Accesso alla memoria):** Questa fase coinvolge l'accesso alla memoria del sistema, ad esempio per leggere o scrivere dati in memoria.
+
+5. **Write-back (Scrittura indietro):** Durante questa fase, il risultato dell'istruzione viene scritto nei registri del processore o in altre memorie.
+
+Ogni fase del pipeline si occupa di una parte diversa del processo di esecuzione delle istruzioni. Mentre un'istruzione sta attraversando le fasi del pipeline, altre istruzioni possono essere prelevate, decodificate ed eseguite contemporaneamente. Ciò consente al processore di eseguire più istruzioni in parallelo, aumentando l'efficienza e la velocità complessiva del processore.
+
+Tuttavia, il funzionamento del datapath pipelined può comportare problemi come le dipendenze dei dati e i conflitti di risorse, che richiedono la gestione attraverso tecniche come la forwarding dei dati e il rilevamento delle dipendenze.
+
+### Altro
+
+Certamente! Una pipeline è una tecnica hardware utilizzata nei processori per eseguire istruzioni in parallelo, divise in diverse fasi sequenziali. Ogni fase del processo di esecuzione di un'istruzione è eseguita da una diversa "unità funzionale" del processore. Questo approccio consente di aumentare l'efficienza e la velocità del processore, consentendo l'esecuzione simultanea di più istruzioni.
+
+Tuttavia, in circuiti molto lunghi, come quello della moltiplicazione con molte ALU, possono verificarsi problemi come il tempo di clock lungo o il cammino critico lungo.
+
+1. **Aumento del tempo di clock:** Se il circuito è molto lungo, aumentare il tempo di clock può sembrare una soluzione intuitiva per garantire che il circuito venga eseguito correttamente in un singolo ciclo di clock. Tuttavia, questo approccio può comportare un "falso speedup" poiché il clock avrà una frequenza minore, il che alla fine non migliora effettivamente le prestazioni del processore.
+
+2. **Inserimento di registri:** Un'alternativa consiste nell'inserire registri all'interno del percorso critico del circuito, ad esempio tra le diverse ALU. Questo suddivide il percorso critico in segmenti più brevi, consentendo all'intero circuito di essere eseguito in un singolo ciclo di clock, sebbene non tutto il circuito possa essere eseguito contemporaneamente. L'inserimento di registri migliora la scalabilità e riduce il cammino critico, ma può comportare una leggera diminuzione delle prestazioni a causa del tempo necessario per salvare e caricare i dati nei registri.
+
+3. **Implementazione della pipeline:** La soluzione più efficace per affrontare circuiti lunghi è implementare una pipeline. Se il circuito è parallelizzabile, è possibile dividere il processo di esecuzione in diverse fasi sequenziali e utilizzare registri per memorizzare i dati intermedi tra le fasi. Questo consente al processore di eseguire un'istruzione in ogni fase della pipeline contemporaneamente, aumentando il throughput complessivo del processore. Anche se il tempo per trasformare un dato in output rimane lo stesso, il throughput complessivo del processore aumenta, poiché ogni ciclo di clock produce un'uscita diversa.
+
+In sintesi, mentre l'aumento del tempo di clock o l'inserimento di registri possono essere soluzioni temporanee per affrontare circuiti lunghi, l'implementazione di una pipeline è spesso la soluzione più efficace per migliorare le prestazioni complessive del processore, consentendo l'esecuzione parallela di più istruzioni e aumentando il throughput complessivo del processore.
+
+
+
+## Memory layout
+
+Nel tipico memory layout di un'architettura RISC-V, i dati statici vengono solitamente posizionati nella sezione del programma eseguibile, mentre i dati dinamici, come gli array o gli oggetti allocati dinamicamente, vengono allocati nello heap.
+
+Ecco una panoramica generale del memory layout tipico di un programma in esecuzione su un'architettura RISC-V:
+
+1. **Testo del programma (code segment o text segment):** Contiene il codice eseguibile del programma, come le istruzioni del programma scritte in linguaggio assembly o linguaggi di programmazione ad alto livello compilati. Questa parte della memoria è solitamente di sola lettura (read-only) e contiene istruzioni eseguibili.
+
+2. **Dati statici (data segment):** Questa sezione contiene i dati statici del programma, come variabili globali o costanti dichiarate all'interno del codice. Questi dati sono in genere inizializzati durante la fase di caricamento del programma e rimangono costanti per tutta la durata dell'esecuzione del programma.
+
+3. **BSS (Block Started by Symbol):** Questa sezione contiene variabili globali non inizializzate o inizializzate a zero. Durante la fase di caricamento del programma, la memoria per queste variabili viene riservata, ma non viene assegnato alcun valore iniziale. 
+
+4. **Stack:** Lo stack viene utilizzato per la gestione delle chiamate di funzione e delle variabili locali. Cresce verso il basso e viene utilizzato per memorizzare informazioni di contesto delle chiamate di funzione, come gli indirizzi di ritorno, i parametri delle funzioni e le variabili locali. 
+
+5. **Heap:** Lo heap è una zona di memoria dinamica che viene utilizzata per l'allocazione di memoria durante l'esecuzione del programma. È comunemente utilizzato per allocare memoria per oggetti di dimensioni variabili, come array o strutture dati, e viene gestito esplicitamente dal programmatore tramite chiamate alle funzioni di allocazione della memoria come malloc() o new() e alle funzioni di deallocazione della memoria come free() o delete().

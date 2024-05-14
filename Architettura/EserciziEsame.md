@@ -1,20 +1,22 @@
 # Esercizi d'esame
 
+
+
+
+
 ---
 
-### 
-
----
-
-### Si dica quale istruzione assembly corrisponde alla seguente stringa binaria:
+## Binario > Assembly:
 
 Ricordando lo schema di codifica delle istruzioni RISC-V R-type
 
 ![](C:\Users\baleo\Pictures\GitUni\imagesMarkText\2024-05-03-14-42-22-image.png)![](C:\Users\baleo\Pictures\GitUni\imagesMarkText\2024-05-03-14-42-43-image.png)
 
-#### 1: `0000 0001 1010 0010 1100 0101 1011 0011`
+### 1: `0000 0001 1010 0010 1100 0101 1011 0011`✔
 
-#### 2:`0000 0000 0010 0011 0111 0011 1011 0011`
+​	`xor x17, x2, x26`
+
+### 2:`0000 0000 0010 0011 0111 0011 1011 0011`✔
 
 ![](C:\Users\baleo\Pictures\GitUni\imagesMarkText\2024-05-04-14-50-29-image.png)
 
@@ -40,9 +42,26 @@ Ricordando lo schema di codifica delle istruzioni RISC-V R-type
 
 ![](C:\Users\baleo\Pictures\GitUni\imagesMarkText\2024-05-03-14-43-22-image.png)
 
-<mark>da fare su carta</mark>
+Sito per convertire in esadecimale
+https://www.eg.bucknell.edu/~csci206/riscv-converter/index.html
 
-### 1: `bne x10, x11, 0xC`
+Ecco un breve riassunto dei passaggi per
+
+bne x10, x11, 4
+
+1. **Identificazione del tipo di istruzione**: Hai riconosciuto che l'istruzione è di tipo SB (branch) dal Green Card, poiché è una BNE (Branch Not Equal).
+
+2. **Ricerca dei valori dei campi dell'istruzione**: Hai determinato i valori corretti per opcode e funct3 dall'informazione fornita nel Green Card.
+
+3. **Conversione in binario**: Hai convertito i registri e i valori immediati in binario, rappresentando i registri come i loro numeri in binario e l'immediato come i suoi bit binari.
+
+4. **Organizzazione dei bit**: Hai organizzato i bit in base alla struttura dell'istruzione SB, seguendo l'ordine specificato nel Green Card.
+
+5. **Conversione in esadecimale**: Infine, hai raggruppato i bit in gruppi di 4 e li hai convertiti in equivalenti esadecimali.
+
+Il risultato finale è stato "**0x08B51263**". Questo rappresenta correttamente l'istruzione BNE x10, x11, 4 in formato esadecimale per il linguaggio assembly RISC-V. Se hai ulteriori domande o hai bisogno di ulteriori chiarimenti su qualcosa, non esitare a chiedere!
+
+### 1: `bne x10, x11, 0xC `✔
 
 - <mark>opcode</mark>(7 bit) 110 0111 - 67
 - imm[11:1] (11 bit)
@@ -52,7 +71,13 @@ Ricordando lo schema di codifica delle istruzioni RISC-V R-type
 - imm[12] (1 bit)
 - <mark>funct7</mark> 000 000 0
 
-### 2: `bne x29, x10, 0xFFC`
+```
+0x00BA1C67
+```
+
+
+
+### 2: `bne x29, x10, 0xFFC `✔
 
 - opcode (7 bit) 110 0111 - 67
 - imm[11:1] (11 bit)
@@ -90,7 +115,7 @@ Mettendo tutto insieme, otteniamo la rappresentazione esadecimale corretta:
 0xFEAE9CE7
 ```
 
-### 3: `bne x5, x6, 0xFE9`
+### 3: `bne x5, x6, 0xFE9` ✔
 
 0xFE9 e' un immediato con 3 cifre esadeciamali
 
@@ -121,7 +146,7 @@ da lui la configurazione dei bit
 `0xfc6299e7`
 ```
 
-### 4: `xor x12, x5, x6`
+### 4: `xor x12, x5, x6` ✔
 
 Interpretazione dei campi:
 
@@ -140,15 +165,15 @@ Convertendo questa stringa binaria in esadecimale otteniamo:
 0x062C633
 ```
 
-### 5: `blt x2, x3, 0x7F0`
+### 5: `blt x2, x3, 0x7F0` ✔
 
 ![](C:\Users\baleo\Pictures\GitUni\imagesMarkText\2024-05-06-14-51-36-image.png)
 
  `0111 1110 0011 0001 0100 0000 1110 0111`
 
-### 6: `addi x10, x10, 4`
+### 6: `addi x10, x10, 4` ✔
 
-0x00450513
+0x00450513 no Sbagliato -> 0x00457513 corretto
 
 ![](C:\Users\baleo\Pictures\GitUni\imagesMarkText\2024-05-06-15-25-04-image.png)
 
@@ -176,7 +201,7 @@ add x9, x18, x10
 sb x11, 0(x9)
 
 # Se il contenuto di x8 è uguale a 0, salta a 0x006 (3 istruzioni avanti)
-beq x8, x0, 0x006
+beq x8, x0, 0x012
 
 # Incrementa il contenuto di x18 di 1
 addi x18, x18, 1
@@ -192,9 +217,9 @@ jalr x0, 0(x1)
 
 ---
 
-## Esadecimale > Assembly
+## Esadecimale > Binario > Assembly
 
-### 1: `0x0073C433`
+### 1: `0x0073C433 `✔ 
 
 Cosa la compone?
 
@@ -220,7 +245,7 @@ Cosa la compone?
 
 L'istruzione e' xor x_8 , x_7 , x_7 ->raddopio x7 e lo aggiungo in x8
 
-### 2: `0xFEA59CE7`
+### 2: `0xFEA59CE7`✔
 
 La stringa esadecimale 0xFEA59CE7 corrisponde alla seguente sequenza binaria:
 
@@ -241,19 +266,29 @@ Quindi, l'istruzione assembly corrispondente è:
 bne x11, x10, 0xFFC
 ```
 
-### 3: `0x00450513`
+### 3: `0x00450513`✔
 
 ![](C:\Users\baleo\Pictures\GitUni\imagesMarkText\2024-05-06-14-53-18-image.png)
 
 ```assembly
 addi x10, x10, 4
+Utilizza un immediato ovvero una costante si 4
+Non ha i bit disordinati ovvero come nel bne che sono una nella 12 e l'altra nel 1:4,no
+Ha 12 bit di immediato 
+|anche se i primi quattro bit sono zero, l'immediato rimane un valore a 12 bit esteso  a 32 bit per l'elaborazione. Pertanto, in questo caso, l'immediato avrà comunque una  lunghezza di 12 bit, esteso a 32 bit per l'elaborazione effettiva dell'istruzione.
 ```
 
-### 4: `0x7F802403`
+### 4: `0x7F802403` ?
 
 ![](C:\Users\baleo\Pictures\GitUni\imagesMarkText\2024-05-06-15-35-12-image.png)
 
-### 5:
+```
+lw x8, 2036(x0)
+```
+
+
+
+### 5: ✔
 
 Si consideri il seguente frammento di memoria istruzioni (indirizzo,
 istruzione):
@@ -346,6 +381,26 @@ L2:                   # Etichetta L2
 jalr x0, 0(x1)       # Salta all'indirizzo contenuto in x1
 ```
 
+### 9:
+
+Dato il seguente programma binario RISC-V
+
+```
+0x00a00513
+0x004000ef
+Oxff810113
+0x00813023
+0x00000413
+0x00a40433
+0xfff50513
+Oxfea04ce3
+0x00013403
+0x00810113
+0x00008067
+```
+
+Si produca l'equivalente codice assembly. Dove sono implicate istruzioni di alterazione del control flow si trasformino gli offset di salto in opportune label. Si descriva la struttura e funzionalità del codice.
+
 ## Da C a Assembly
 
 ### 1:
@@ -391,7 +446,7 @@ loop1:
     jalr x0, 0(x1)      // Ritorna al chiamante
 ```
 
-### 2:
+### 2:   ✔
 
 ```nasm
 int i = 0;
@@ -401,6 +456,31 @@ i += 1;
 return i;
 }
 ```
+
+```assembly
+#k -> x10
+#save*-> x11
+
+addi x5, x5, 0 #i
+
+
+loop:
+    slli x6,x5,3 #x6+i*8
+    add x7,x11,x6 #x7= save[i]
+    
+    beq x7, x10, ret #x7 == k esci, while esci finche e' vero
+    addi x5,x5,1 #i++ altrimenti
+    j loop #ritorna indietro
+
+ret:
+    mv ra, i
+    jalr x0, 0(ra)
+#Salta all'indirizzo contenuto in ra che e' la chiamata di funzione e restituisce al chiamante
+```
+
+
+
+
 
 ### 3:
 
@@ -423,7 +503,7 @@ sd x30, 0(x31) // B[g] = A[f+1]+f
 
 Output: `B[g] = A[f+1]+f`
 
-### 4:
+### 4: ✔
 
 ```c
 clear1 (int array[], int size) {
@@ -460,13 +540,18 @@ return toret;
 }
 ```
 
+### 6:
 
+Implementare in assembly RISCV la funzione C memcpy
+`void memcpy(void* dest, const void src, size_t count);`
+che prende in ingresso un puntatore a un buffer di memoria destinazione dest, un puntatore a un buffer di memoria sorgente src e un numero di bytes count. La funzione copia count bytes di src in dest.
+Gestire correttamente lo stack come da calling convention, cosi come il passaggio dei parametri di ingresso e di uscita sui registri appropriati. Scrivere la funzione main che invoca memcpy. mostrando anche l'allocazione degli array sul segmento dati statico del file ELF.
 
 
 
 ### Assembly a C
 
-### 1:
+### 1:  ✔
 
 ```nasm
 CIC:
@@ -482,11 +567,12 @@ blt x6, x29, CIC
 
 ```c
 int Ris = 0;
-for (int i=0; i<100; i++)
-Ris += MemVett[i];
+int n=100;
+for (int i=0; i<n; i++)
+Ris = Ris + MemVett[i];
 ```
 
-### 2:
+### 2: ✔
 
 ```nasm
 CICLO: beq x6, x0, FINE
@@ -509,16 +595,20 @@ oppure while (i-- > 0) acc += 2;
 oppure for ( ; i>0; i--) acc += 2;
 ```
 
-#### b. Si supponga che il registro x6 sia inizializzato col valore numerico N. Quante istruzioni
+#### b. Si supponga che il registro x6 sia inizializzato col valore numerico N. 
 
-RISC-V verranno eseguite dal ciclo riportato sopra?
+Quante istruzioni RISC-V verranno eseguite dal ciclo riportato sopra?
 
 > N x 4 + 1
+>
+> Quindi, se il ciclo viene eseguito "N" volte, avrai "4N" istruzioni  all'interno del ciclo, e poi c'è una istruzione di salto (jal) che porta nuovamente all'inizio del ciclo. Quindi, il totale delle istruzioni  sarà "4N + 1".
 
 #### c. Sostituire l’istruzione beq con l’istruzione blt. Scrivere l’equivalente codice C.
 
 ```c
-while (i-- >= 0) acc += 2;
+while (i >= 0)
+    acc += 2;
+	i--;
 ```
 
 
@@ -533,12 +623,12 @@ while (i-- >= 0) acc += 2;
 
 ## Cosa ritorna/fa il programma?
 
-### 1:
+### 1:  ✔
 
 si assuma che corrisponda all'implementazione di una funzione la cui interfaccia C è
 `int fun (int n);`
 
-```nasm
+```assembly
 //a0=n
 fun: addi s0, zero, 0 //s0=0
     addi s1, zero, 1 //s1=1
@@ -551,15 +641,17 @@ exit: add a0, zero, s1 //a0=s1
     jalr zero, 0(ra) //return ra[a]
 ```
 
-Ritorna $2^n$
-
+Ritorna
+$$
+2^n
+$$
 L'istruzione `jalr` (Jump and Link Register) è utilizzata per
  effettuare un salto a un'istruzione a un indirizzo specificato, 
 memorizzare l'indirizzo dell'istruzione successiva nel registro `$ra` (registro di salvataggio) e caricare l'indirizzo di destinazione da un registro anziché un valore immediato.
 
-### 2:
+### 2: ✔
 
-#### Quale e' il valore contenuto in x5 dopo l'esecuzione di questa istruzione:
+Quale e' il valore contenuto in x5 dopo l'esecuzione di questa istruzione:
 
 ```c
 addi x5, x0, 1 //x5 = 1
@@ -574,26 +666,13 @@ exit:
 
 Cosa scegli tra: 2^5 o 2^6 ->
 
-1*2*2*2*2*2*2 =64
+1*2*2*2*2*2*2 =64 2 alla 6
 
-#### Quale e' il valore contenuto in x5 dopo l'esecuzione di questa istruzione:
+ho spostato a sinistra 1: 00**1**00000
 
-```nasm
-//x5=0
-//x6=10
-Ciclo:
-    blt x6, x0, exit //x6 < 0
-    addi x6, x6, -1
-    addi x5, x5, 3 // 3*11
-    jal x0, ciclo
-exit
+### 3: ✔
 
-x5 = 3*3*3 *3*3*3* *3*3*3* *3*3 > 33
-```
-
-### 3:
-
-```qasm
+```assembly
 //assumiamo int arr[6]={3,1,4,1,5,9}
 s0=0xBRFFFFF00
 add t0, x0, x0 //t0=0
@@ -626,9 +705,9 @@ s0=0xBRFFFFF00: Inizializzazione del registro `s0` con l'indirizzo base dell'arr
 **jal x0, loop**: Salta all'etichetta `loop` per eseguire nuovamente il ciclo.
 **end**: Etichetta per indicare la fine del loop.
 
-### 4:
+### 4: ✔
 
-```nasm
+```assembly
 //assumiamo che x12 = 0 e x13 = 10
 CICLO:
 blt x13, x0, EXIT //x13 < 0 exit , 11 volte
@@ -640,9 +719,9 @@ EXIT:
 
 `2*2*2 *2*2*2 *2*2*2*2*2 = 22`
 
-### 5:
+### 5: ✔
 
-```nasm
+```assembly
 .globl main            # Dichiarazione globale della funzione main
 
 .data                  # Sezione dei dati
@@ -672,9 +751,9 @@ exit:                  # Etichetta per l'uscita dalla funzione
 
 ![](C:\Users\baleo\Pictures\GitUni\imagesMarkText\2024-05-06-15-45-01-image.png)
 
-### 6:
+### 6: ✔
 
-```nasm
+```assembly
 fun:
     li t0, 5          # Carica il valore 5 nel registro t0
     li t1, 1          # Carica il valore 1 nel registro t1
@@ -691,7 +770,34 @@ fun2:
 
 ![](C:\Users\baleo\Pictures\GitUni\imagesMarkText\2024-05-06-15-45-59-image.png)
 
-### 7:
+Il pezzo di codice assembly fornito non rispetta la convenzione di chiamata standard (calling convention) poiché non gestisce correttamente i registri utilizzati per passare gli argomenti e restituire i valori.
+
+Nel codice assembly RISC-V, la convenzione di chiamata prevede di utilizzare determinati registri per passare gli argomenti e restituire i valori. Di solito, ad esempio, i valori restituiti sono memorizzati nel registro `a0`, mentre gli argomenti vengono passati attraverso i registri `a0`, `a1`, `a2`, ecc.
+
+In questo codice assembly, la funzione `fun()` carica il risultato di `fun2()` nel registro `a0` senza rispettare la convenzione di chiamata. Inoltre, non salva il valore di ritorno della funzione `fun2()` prima di modificarlo, quindi potrebbe sovrascrivere il valore necessario per essere restituito al chiamante.
+
+Una versione corretta del codice dovrebbe rispettare la convenzione di chiamata standard e garantire che il valore di ritorno di `fun2()` sia memorizzato e restituito correttamente al chiamante. Ad esempio:
+
+```assembly
+fun:
+    li t0, 5          # Carica il valore 5 nel registro t0
+    li t1, 1          # Carica il valore 1 nel registro t1
+    add s0, t0, t1    # Somma i valori nei registri t0 e t1 e memorizza il risultato in s0
+    mv a0, s0         # Copia il valore da s0 ad a0 per passarlo come argomento a fun2
+    jal ra, fun2      # Chiama la funzione fun2 e salta all'indirizzo di ritorno
+    mv s1, a0         # Salva il valore restituito di fun2 in s1
+    add a0, s1, t0    # Aggiunge il valore nel registro t0 al valore restituito da fun2 e memorizza il risultato in a0
+    ret               # Restituisce al chiamante
+
+fun2:
+    addi t0, a0, 1    # Incrementa il valore in a0 di 1 e memorizza il risultato in t0
+    mv a0, t0         # Memorizza il risultato in a0 per la restituzione
+    ret               # Restituisce al chiamante
+```
+
+In questa versione corretta del codice, il valore restituito da `fun2()` viene memorizzato prima di modificarlo e viene utilizzato il registro `a0` per la restituzione del valore.
+
+### 7: ✔
 
 Sapendo che il valore contenuto nel registro t2 al termine del programma è
 10, dire che valore ha la variabile n. Motivare la risposta.
@@ -727,9 +833,9 @@ exit:                   # Etichetta per l'uscita dalla funzione
 Il loop mette in t2 il valore di arr[0], poi in un loop si vanno a sottrarre gli altri
 elementi dell’array a partire da quello di indice più alto e tornando a ritroso. Se alla fine del programma in t2 c’è ancora 10 vuol dire che il loop non ha mai eseguito.
 Perché ciò avvenga la beq deve risultare true dalla prima volta, e perché ciò succeda
-occorre che in t1 ci sia inizialmente 1
+occorre che in t1 ci sia inizialmente 1. **n=1**
 
-### 8:
+### 8:  ✔
 
 Si supponga che x5 contenga il valore 0x0000 0000 0101 0000. Determinare il contenuto
 di x6 dopo l’esecuzione delle seguenti istruzioni:
@@ -743,9 +849,22 @@ FINE:
 
 Ritorna `2`
 
+### 9: ✔
 
+Quale e' il valore contenuto in x5 dopo l'esecuzione di questa istruzione:
 
+```assembly
+//x5=0
+//x6=10
+Ciclo:
+    blt x6, x0, exit //x6 < 0
+    addi x6, x6, -1
+    addi x5, x5, 3 // 3*11
+    jal x0, ciclo
+exit
 
+x5 = 3+3+3 +3+3 -> 33
+```
 
 
 
@@ -758,11 +877,11 @@ Ritorna `2`
 ### 1:
 
 La moltiplicazione in RISC-V:
-a) Può essere sostituita con uno shift a sinistra quando il moltiplicatore è una potenza
+<mark>**a)** </mark>Può essere sostituita con uno shift a sinistra quando il moltiplicatore è una potenza
 di due
 b) È realizzabile tramite una sequenza di sottrazioni
 c) Richiede logica dedicata, spesso pipelined
-d) Esegue in un ciclo come tutte le operazioni aritmetico-logiche
+d) Esegue in un ciclo come tutte le operazioni aritmetico-logiche 
 
 ```nasm
 mul a2, a0, a1
@@ -784,6 +903,10 @@ d) **Esegue in un ciclo come tutte le operazioni aritmetico-logiche**:
 
 - La moltiplicazione è solitamente più complessa rispetto alle operazioni aritmetico-logiche elementari, come l'addizione e la sottrazione, e di solito richiede più cicli di clock per essere eseguita. Non è sempre vero che la moltiplicazione possa essere eseguita in un singolo ciclo come altre operazioni aritmetico-logiche.
 
+Altro:
+
+se devo spostarmi per offset multiplo di due slli x6, x11, 3 -> x6 = k*8 ho schiftato di 3 e come dire che ho moltiplicato per 8
+
 ### 2:
 
 ![](C:\Users\baleo\Pictures\GitUni\imagesMarkText\2024-05-04-16-01-24-2024-05-04-15-47-18-2024-05-02-19-45-39-image.png) 
@@ -796,7 +919,7 @@ Il risultato finale dell'esercizio è 0x2000 0FFE. Per capire come si è arrivat
    Il campo immediato dell'istruzione beq è di 12 bit, il che significa che può rappresentare un'offset compreso tra -2048 e 2047. Tuttavia, essendo l'offset positivo, il valore massimo rappresentabile è (0111 1111 1111)₂, che in decimale è 2047.
 
 2. **Shift e moltiplicazione per due:** 
-   Quando viene eseguita un'istruzione di salto condizionato come beq, l'offset viene moltiplicato per due prima di essere sommato al valore del program counter (PC). Questo perché le istruzioni sono allineate in memoria ogni 4 byte (o 2 byte nel caso dell'estensione C dell'instruction set compatto a 16 bit). Quindi, un salto di 1 istruzione corrisponde a un offset di 4 byte, quindi un'istruzione successiva nel flusso del programma si trova a 4 byte di distanza da quella corrente.
+   Quando viene eseguita un'istruzione di salto condizionato come beq, l'offset viene moltiplicato per due prima di essere sommato al valore del program counter (PC). <mark>Questo perché le istruzioni sono allineate in memoria ogni 4 byte (o 2 byte nel caso dell'estensione C dell'instruction set compatto a 16 bit). </mark>.>Quindi, un salto di 1 istruzione corrisponde a un offset di 4 byte, quindi un'istruzione successiva nel flusso del programma si trova a 4 byte di distanza da quella corrente.
 
 3. **Massimo salto in avanti:** Considerando il valore del PC iniziale di 0x2000 0000 e aggiungendo l'offset massimo di 2047 moltiplicato per due, otteniamo:
    
@@ -804,7 +927,9 @@ Il risultato finale dell'esercizio è 0x2000 0FFE. Per capire come si è arrivat
 
 Quindi, il risultato finale è 0x2000 0FFE, che rappresenta l'indirizzo più grande che può essere raggiunto tramite l'istruzione beq partendo da un PC di 0x2000 0000.
 
-### 3: Un sistema di branch prediction:
+### 3: NO
+
+Un sistema di branch prediction:
 
 A) Consente di risolvere il problema degli structure hazards, soprattutto in architetture
 provviste di cache
@@ -813,7 +938,7 @@ C) Può essere implementato con una semplice ALU a n bit
 <mark>**D)**</mark> Se di tipo dinamico, tiene traccia del risultato degli ultimi salti condizionali, e assume
 che il comportamento sia identico in futuro.
 
-### 4:
+### 4: ✔
 
 I registri `x5 e x6 `di un processore RISC-V contengano i valori `0x8000 0000 0000 0000` e
 `0xD000 0000 0000 0000`, rispettivamente. Quale affermazione è corretta?
@@ -822,7 +947,7 @@ a) Non c’è overflow se si esegue l’istruzione add x30, x5, x6
 c) Non c’è overflow se si esegue l’istruzione sub x30, x5, x6
 d) Nessuna delle precedenti
 
-### 5:
+### 5: ✔
 
 Il blocco di istruzioni seguente è **idempotente**, cioè lo stato della macchina al termine
 dell’esecuzione è identico a quello d’inizio, eccettuato il program counter.
@@ -832,9 +957,10 @@ A) andi x11, x11, 0
     xor x28, x28, x29
 D) beq x0, x0, x0
 
+> le istruzioni di tipo R sono operazioni aritmetiche o logiche sui  registri che non modificano lo stato della macchina o il flusso di  esecuzione del programma, mentre le istruzioni di tipo I e SB possono  alterare il flusso di esecuzione del programma, ad esempio modificando  il flusso di esecuzione tramite salti condizionali o ramificazioni.
+>
 
-
-### 6:
+### 6: ✔
 
 In caso di chiamata di una funzione foglia (i.e., che non chiama altre funzioni):
 **<mark>a)</mark>** È possibile evitare di salvare sullo stack l'indirizzo di ritorno del chiamante
@@ -843,7 +969,7 @@ funzione chiamata
 **<mark>c)</mark>** In generale, è possibile evitare di salvare sullo stack il valore degli argomenti passati dal chiamante al chiamato
 d) È consigliabile ritornare alla funzione chiamante attraverso l'istruzione `jal x1, ProcedureLabel`
 
-### 7:
+### 7: STUDIA
 
 Nel tipico memory layout di una architettura RISC-V:
 a) Figura lo spazio per i dati (statici o dinamici), ma non per il codice
@@ -851,9 +977,24 @@ b) I dati statici e i dati dinamici sono entrambi allocati nello spazio riservat
 **<mark>c)</mark>** Stack e memoria dinamica crescono in direzioni opposte contendendosi lo stesso spazio di memoria
 **<mark>d)</mark>** Si trovano indirizzi puntati da frame pointer e stack pointer
 
+> Nel tipico memory layout di un'architettura RISC-V, i dati statici vengono solitamente posizionati nella sezione del programma eseguibile, mentre i dati dinamici, come gli array o gli oggetti allocati dinamicamente, vengono allocati nello heap.
+>
+> Ecco una panoramica generale del memory layout tipico di un programma in esecuzione su un'architettura RISC-V:
+>
+> 1. **Testo del programma (code segment o text segment):** Contiene il codice eseguibile del programma, come le istruzioni del programma scritte in linguaggio assembly o linguaggi di programmazione ad alto livello compilati. Questa parte della memoria è solitamente di sola lettura (read-only) e contiene istruzioni eseguibili.
+>
+> 2. **Dati statici (data segment):** Questa sezione contiene i dati statici del programma, come variabili globali o costanti dichiarate all'interno del codice. Questi dati sono in genere inizializzati durante la fase di caricamento del programma e rimangono costanti per tutta la durata dell'esecuzione del programma.
+>
+> 3. **BSS (Block Started by Symbol):** Questa sezione contiene variabili globali non inizializzate o inizializzate a zero. Durante la fase di caricamento del programma, la memoria per queste variabili viene riservata, ma non viene assegnato alcun valore iniziale. 
+>
+> 4. **Stack:** Lo stack viene utilizzato per la gestione delle chiamate di funzione e delle variabili locali. Cresce verso il basso e viene utilizzato per memorizzare informazioni di contesto delle chiamate di funzione, come gli indirizzi di ritorno, i parametri delle funzioni e le variabili locali. 
+>
+> 5. **Heap:** Lo heap è una zona di memoria dinamica che viene utilizzata per l'allocazione di memoria durante l'esecuzione del programma. È comunemente utilizzato per allocare memoria per oggetti di dimensioni variabili, come array o strutture dati, e viene gestito esplicitamente dal programmatore tramite chiamate alle funzioni di allocazione della memoria come malloc() o new() e alle funzioni di deallocazione della memoria come free() o delete().
+>
+> In sintesi, i dati statici vengono memorizzati nel data segment, mentre i dati dinamici vengono allocati nello heap. Lo stack viene utilizzato per la gestione delle chiamate di funzione e delle variabili locali, mentre il testo del programma contiene il codice eseguibile.
+>
 
-
-### 8:
+### 8: STUDIA
 
 Il linguaggio C ha molti costrutti per le decisioni e i cicli, mentre l’assembly RISC-V ne ha pochi
 perché:
@@ -864,7 +1005,15 @@ dell’esecuzione
 di programmazione
 d) Nessuna delle precedenti
 
-### 9:
+> <mark>b:</mark> **Semplificazione del design dell'ISA:**
+> Le architetture RISC, come RISC-V, sono progettate con un set di istruzioni ridotto (RISC sta per Reduced Instruction Set Computer). Questo approccio è stato scelto per semplificare il design e l'implementazione del processore. Limitare il numero di istruzioni e costrutti decisionali nell'ISA semplifica l'architettura del processore, riducendo la complessità del hardware e facilitando l'implementazione di un'architettura efficiente e ad alte prestazioni.
+>
+> <mark>c:</mark> **Riduzione del tempo di programmazione:**
+> L'uso di più costrutti decisionali nei linguaggi di programmazione di alto livello, come C, può facilitare la scrittura del codice e renderlo più leggibile e mantenibile. I costrutti come if, else, switch e loop for consentono ai programmatori di scrivere codice in modo più conciso e espressivo, affrontando diverse condizioni e iterazioni in modo più intuitivo. Di conseguenza, i programmatori possono scrivere codice più rapidamente e con meno sforzo, riducendo il tempo di sviluppo complessivo del software.
+>
+> In sintesi, la scelta di limitare i costrutti decisionali nell'ISA delle architetture RISC come RISC-V è principalmente guidata dalla necessità di semplificare il design del processore e rendere l'implementazione hardware più efficiente. D'altra parte, l'uso di più costrutti decisionali nei linguaggi di programmazione di alto livello come C è motivato dalla necessità di scrivere codice in modo più rapido, conciso e intuitivo, riducendo così il tempo di sviluppo complessivo del software.
+
+### 9:  ✔
 
 Le istruzioni di salto condizionato in RISC-V:
 **<mark>a)</mark>** Realizzano il controllo di flusso della logica del programma
@@ -872,9 +1021,14 @@ b) Implementano il tic dell'orologio del sistema (clock)
 c) Non usano la ALU per il loro funzionamento
 d) Possono avere tra gli operandi degli indirizzi da valutare
 
+> In sintesi, le istruzioni di salto condizionato in RISC-V utilizzano l'ALU per valutare le condizioni e calcolare gli indirizzi di salto, ma non possono valutare direttamente gli indirizzi come operandi perché prendono decisioni basate solo su dati presenti nei registri o sullo stato corrente della CPU.
+>
+> Quindi, le istruzioni di salto condizionato in RISC-V non possono avere tra gli operandi degli indirizzi da valutare perché queste istruzioni sono progettate per prendere decisioni basate solo su dati presenti nei registri o sulle condizioni correnti dello stato della CPU. L'indirizzo di destinazione del salto è specificato direttamente nell'istruzione di salto e non viene valutato come un operando separato.
+>
 
 
-### 10:
+
+### 10: ✔
 
 `and rd, rs1, rs2`
 
@@ -884,7 +1038,17 @@ a) La ALU e la data memory eseguono entrambe lavoro utile
 **<mark>c)</mark>** Durante la fase di decode il register file esegue lavoro utile
 d) La ALU non esegue lavoro utile
 
-
+> Per comprendere perché la "immediate generation unit" (unità di generazione immediata), durante il funzionamento di un datapath pipelined, non esegue lavoro utile mentre altre unità sì, dobbiamo esaminare il ruolo e il funzionamento di ciascuna unità nel pipeline.
+>
+> 1. **Immediate Generation Unit (IGU):** Questa unità è responsabile della generazione delle immediate, cioè dei valori immediati o costanti utilizzati nelle istruzioni. Nel pipeline, l'IGU non esegue lavoro utile perché il valore immediato è noto già durante la fase di fetch dell'istruzione successiva. L'IGU prepara l'immediato per l'istruzione successiva mentre il processore sta eseguendo l'istruzione corrente, ma il suo lavoro non contribuisce direttamente all'avanzamento dell'istruzione corrente nel pipeline.
+>
+> 2. **Register File (RF):** Il register file è responsabile della lettura e della scrittura nei registri del processore. Durante la fase di decode, l'unità di decodifica deve leggere i registri per ottenere i valori degli operandi. Quindi, il register file esegue lavoro utile durante la fase di decode fornendo i valori dei registri necessari per l'esecuzione dell'istruzione corrente.
+>
+> 3. **Arithmetic Logic Unit (ALU):** L'ALU è responsabile dell'esecuzione di operazioni aritmetiche e logiche. Durante la fase di esecuzione, l'ALU esegue le operazioni specificate dall'istruzione corrente, come addizioni, sottrazioni, confronti, ecc. Pertanto, durante questa fase, l'ALU esegue lavoro utile producendo il risultato dell'operazione.
+>
+> 4. **Data Memory (DM):** La memoria dei dati è responsabile dell'accesso ai dati in memoria. Tuttavia, molte istruzioni non coinvolgono l'accesso alla memoria dei dati, quindi durante la fase di accesso alla memoria, la DM potrebbe non eseguire lavoro utile. Solo le istruzioni che coinvolgono il caricamento o il salvataggio di dati in memoria richiedono l'accesso alla DM.
+>
+> In sintesi, l'IGU non esegue lavoro utile durante l'esecuzione dell'istruzione corrente perché prepara i valori immediati per l'istruzione successiva. Al contrario, il register file fornisce i valori dei registri necessari per l'istruzione corrente durante la fase di decode, l'ALU esegue operazioni utili durante la fase di esecuzione e la data memory può non eseguire lavoro utile se l'istruzione corrente non coinvolge l'accesso ai dati in memoria.
 
 ### 11:
 
@@ -896,6 +1060,13 @@ c) Accedere al livello più alto della gerarchia di cache ha il costo più alto 
 
 
 
+1. Perche il valore restituito da una lettera NON dipende da quali blocchi si trovano nella cache?
+2. Le gerarchie di memorie sfruttano le localita' temporale?
+
+3. Perche accedere al livello piu alto dell agerarchia di cache non ha il costo piu alto del sistema di memoria?
+
+4. Perche la maggior parte della capacita di una gerarchia di memoria si trova nel livello piu basso?
+
 
 
 
@@ -906,7 +1077,9 @@ c) Accedere al livello più alto della gerarchia di cache ha il costo più alto 
 
 ## Scrivere un pezzo di codice assembly
 
-### 1: che effettui l’operazione `arr[1] = arr[0] + arr[2]`
+### 1: 
+
+che effettui l’operazione `arr[1] = arr[0] + arr[2]`
 
 ```nasm
 lw t0, 0(s0)    # Carica il contenuto di arr[0] nel registro t0
@@ -919,7 +1092,11 @@ sw t2, 4(s0)    # Salva il contenuto di t2 (somma di arr[0] e arr[2]) nella posi
 
 ### 2:
 
-$\{ 2^N, \text{ se } O = 0 \quad \log_2 N, \text{ se } O = 1 \}$
+$$
+{ 2^N, \text{ se } O = 0 \quad \log_2 N, \text{ se } O = 1 }
+$$
+
+
 
 ```nasm
 #Si assume che gli argomenti vengano passati nei registri a0(per O) e a1(per N)
@@ -965,8 +1142,10 @@ Spiegazione:
 
 Si scriva una funzione sommatoria che prende in ingresso un intero n e ritorna
 la sommatoria mostrata sotto. Se n è non positivo la funzione ritorna -1, se è nullo
-ritorna 0: $1^1 + 2^2 +3^3 +. . . +𝑛^𝑛$
-
+ritorna 0: 
+$$
+1^1 + 2^2 +3^3 +. . . +𝑛^𝑛
+$$
 Per svolgere il calcolo la funzione sommatoria deve chiamare una funzione elev che
 prende in ingresso un intero a e restituisce aa.
 Si scrivano le funzioni sommatoria e elev rispettando la calling convention RISC-V e
@@ -1323,7 +1502,40 @@ L3:
 
 ## Domande aperte:
 
-### 1: Si descriva brevemente la calling convention del RISC-V, evidenziando le differenze tra temporary registers e saved registers.
+### 1: ✔ Si descriva brevemente la calling convention del RISC-V, evidenziando le differenze tra temporary registers e saved registers.
+
+Registri temporanei e registri salvati.
+Anche i registri salvati sono temporanei, ma i registri salvati sono gestiti diversamente: i registri temporanei non sono preservati dal chiamante (caller) e sono volatili tra le chiamate; se il chiamante vuole essere sicuro di non avere valori modificati all'interno dei registri temporanei, deve salvarli.
+I registri salvati, invece, sono preservati tra le chiamate; perché per convenzione chi scrive la funzione li salva, assicurandoli. Quindi, apprendiamo adesso che noi non avremmo dovuto salvare i nostri, perché era responsabilità del chiamante assicurarli.
+In breve:
+→ se ho bisogno di pochi registri, uso quelli temporanei e non gestisco il salvataggio
+→ se ho bisogno di tanti registri e mi tocca usare quelli salvati, dentro la funzione devo gestire i salvataggi vari.
+
+La calling convention del RISC-V definisce le regole e le convenzioni che regolano come le funzioni interagiscono tra loro durante l'esecuzione del programma. Tra le principali convenzioni ci sono quelle riguardanti i registri temporanei e i registri salvati.
+
+1. **Registri temporanei (temporary registers):** I registri temporanei non sono preservati tra le chiamate di funzione. Questi registri sono volatili e possono essere sovrascritti da una qualsiasi funzione senza la necessità di essere salvati e ripristinati. Il chiamante non è tenuto a garantire l'integrità dei dati all'interno dei registri temporanei.
+
+2. **Registri salvati (saved registers):** I registri salvati, invece, sono preservati tra le chiamate di funzione. È responsabilità della funzione chiamata (callee) salvare e ripristinare i valori dei registri salvati se vuole modificarli. Questo garantisce che i valori contenuti nei registri salvati non vengano modificati accidentalmente dalle chiamate di funzione.
+
+In sintesi:
+
+- Se una funzione ha bisogno di pochi registri, può utilizzare i registri temporanei senza dover gestire il salvataggio e il ripristino.
+- Se una funzione ha bisogno di molti registri, deve utilizzare i registri salvati e gestire il salvataggio e il ripristino all'interno della funzione stessa.
+
+In generale, l'uso dei registri temporanei è preferibile quando possibile, poiché non richiede operazioni aggiuntive di salvataggio e ripristino e può portare a una maggiore efficienza del codice. Tuttavia, quando si utilizzano molti registri, è necessario utilizzare i registri salvati e seguire le convenzioni appropriate per garantire l'integrità del programma.
+
+
+
+
+
+### 2: ✔ Si descrivano le principali differenze nella gestione dello stack quando si implementa una funzione foglia rispetto ad una funzione non foglia. 
+Nel contesto dell'architettura di un calcolatore, una "funzione foglia" e una "funzione non foglia" possono riferirsi a due concetti diversi, quindi fornirò una panoramica generale di come la gestione dello stack potrebbe variare in base a questi due scenari:
+
+1. **Funzione foglia**: Una funzione foglia è una funzione che non chiama altre funzioni all'interno del suo corpo. In questo caso, quando la funzione foglia viene chiamata, solitamente non è necessario salvare lo stato dello stack, poiché non ci sono chiamate ricorsive o richiami di altre funzioni che potrebbero sovrascrivere il contesto dello stack attuale. Quindi, la gestione dello stack in una funzione foglia potrebbe comportare meno operazioni di salvataggio e ripristino dello stato dello stack.
+
+2. **Funzione non foglia**: Una funzione non foglia è una funzione che chiama altre funzioni all'interno del suo corpo. Quando una funzione non foglia viene chiamata, è necessario gestire il salvataggio dello stato dello stack corrente (come i registri di base e i puntatori dello stack) per poter tornare correttamente al contesto della funzione chiamante una volta che la funzione è completata. Questo comporta il salvataggio dei registri importanti, come il puntatore di base dello stack (stack pointer) e il puntatore di base del frame della funzione corrente (frame pointer), prima di chiamare altre funzioni, e il ripristino di questi registri una volta che la funzione è completata.
+
+In generale, la gestione dello stack in una funzione non foglia potrebbe essere più complessa rispetto a una funzione foglia a causa della necessità di gestire i contesti di chiamata e ritorno delle funzioni. Questo può richiedere un maggiore utilizzo della memoria stack e potrebbe influenzare le prestazioni dell'applicazione.
 
 
 
@@ -1335,4 +1547,9 @@ L3:
 
 ![](C:\Users\baleo\Pictures\GitUni\imagesMarkText\2024-05-06-21-47-09-image.png)
 
-![](C:\Users\baleo\Pictures\GitUni\imagesMarkText\2024-05-06-21-47-18-image.png)
+
+
+![](C:\Users\baleo\Pictures\GitUni\imagesMarkText\2024-05-06-21-47-18-image.png) 
+
+
+

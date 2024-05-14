@@ -18,9 +18,11 @@ loop:
     beq t0, t1, exit
     la a0, str1
     ecall
+    
     li a7, 1
     mv a0, t0
     ecall
+    
     la a0, str2
     l1 a7, 4
     ecall
